@@ -42,19 +42,25 @@ magmax = 0;
 
 for quake in events:
 	mag = quake['properties']['mag']
+	if mag == magmax:
+		maxcoords.append(quake['geometry']['coordinates'])
 	if mag > magmax:
 		magmax = mag
-		maxcoords = quake['geometry']['coordinates']
+		if "maxcoords" in locals():
+			del maxcoords
+		maxcoords = [quake['geometry']['coordinates']]
+		
 
 #map_response = request_map_at(maxcoords[1], maxcoords[2])
-map_png = map_at(maxcoords[1],maxcoords[2]);
+for coords in maxcoords:
+	map_png = map_at(coords[1],coords[2]);
 
-filename = "quake.png"
-imgfile = open(filename,"wb")
-imgfile.write(map_png)
-imgfile.close()
+	filename = "quake.png"
+	imgfile = open(filename,"wb")
+	imgfile.write(map_png)
+	imgfile.close()
 
-os.system("feh " + filename)
+	os.system("feh " + filename)
 
 
 
