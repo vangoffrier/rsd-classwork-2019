@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+from argparse import ArgumentParser
+
 """Computation of weighted average of squares."""
 
 
@@ -50,10 +53,15 @@ def convert_numbers(list_of_strings):
 
 
 if __name__ == "__main__":
-    with open("numbers.txt", "r") as numbers_file:
+    parser = ArgumentParser(description="Access number and weight files")
+    parser.add_argument('--numbers', '-n')
+    parser.add_argument('--weights','-w')
+    arguments= parser.parse_args()
+    
+    with open(arguments.numbers, "r") as numbers_file:
         numbers_strings = numbers_file.readlines()
     # TODO Can we make this optional, so that we don't need a weights file?
-    with open("weights.txt", "r") as weights_file:
+    with open(arguments.weights, "r") as weights_file:
         weight_strings = weights_file.readlines()
     numbers = convert_numbers(numbers_strings)
     weights = convert_numbers(weight_strings)
