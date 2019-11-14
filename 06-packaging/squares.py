@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from argparse import ArgumentParser
+import math
 
 """Computation of weighted average of squares."""
 
@@ -56,16 +57,26 @@ if __name__ == "__main__":
     parser = ArgumentParser(description="Access number and weight files")
     parser.add_argument('--numbers', '-n')
     parser.add_argument('--weights','-w')
+    parser.add_argument('--sqrt','-s', action="store_true")
+    parser.add_argument('--output','-o')
     arguments= parser.parse_args()
     
     with open(arguments.numbers, "r") as numbers_file:
         numbers_strings = numbers_file.readlines()
-    # TODO Can we make this optional, so that we don't need a weights file?
-    with open(arguments.weights, "r") as weights_file:
-        weight_strings = weights_file.readlines()
     numbers = convert_numbers(numbers_strings)
-    weights = convert_numbers(weight_strings)
-    # TODO Can we add the option of computing the square root of this result?
+    # TODO Can we make this optional, so that we don't need a weights file? DONE
+    if arguments.weights:
+        with open(arguments.weights, "r") as weights_file:
+            weight_strings = weights_file.readlines()
+	weights = convert_numbers(weight_strings)
+    else: weights=None
+    # TODO Can we add the option of computing the square root of this result? DONE
     result = average_of_squares(numbers, weights)
-    # TODO Can we write the result in a file instead of printing it?
-    print(result)
+    if arguments.sqrt:
+		result = math.sqrt(result)
+    # TODO Can we write the result in a file instead of printing it? DONE
+    if arguments.output:
+	    with open(arguments.output, 'w') as outfile:
+	        print >> outfile, result
+    else:
+	    print(result)
